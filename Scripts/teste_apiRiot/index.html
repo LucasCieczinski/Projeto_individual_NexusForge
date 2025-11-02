@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Buscar Jogador - LoL</title>
+    <style>
+      body {
+        background: #111;
+        color: white;
+        font-family: Arial, sans-serif;
+        text-align: center;
+        margin-top: 100px;
+      }
+      input,
+      button {
+        padding: 10px;
+        border-radius: 5px;
+        border: none;
+        font-size: 16px;
+      }
+      button {
+        background: #1b57f2;
+        color: white;
+        cursor: pointer;
+      }
+      .resultado {
+        margin-top: 20px;
+        padding: 15px;
+        border-radius: 8px;
+        background: #222;
+        display: inline-block;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Buscar Jogador - League of Legends</h1>
+    <input id="riotId" type="text" placeholder="Ex: Nome#Tag" />
+    <button onclick="buscarJogador()">Buscar</button>
+
+    <div id="resultado" class="resultado"></div>
+
+    <script>
+      const apiKey = "RGAPI-841a2674-25f7-4474-806e-77b2767ce218";
+
+      async function buscarJogador() {
+        const riotId = document.getElementById("riotId").value;
+        const resultado = document.getElementById("resultado");
+        resultado.textContent = "Buscando...";
+        resultado.style.color = "white";
+
+        try {
+          const [nome, tag] = riotId.split("#");
+          if (!nome || !tag) {
+            resultado.textContent = "Formato inválido. Use Nome#Tag.";
+            resultado.style.color = "red";
+            return;
+          }
+
+          // 1️⃣ Buscar conta pela Riot ID
+          const contaResponse = await fetch(
+            `https://americas.api.riotgames.com/riot/account/v1/accounts/by-riot-id/${nome}/${tag}?api_key=${apiKey}`
+          );
+          if (!contaResponse.ok) throw new Error("Conta não encontrada");
+          const conta = await contaResponse.json();
+
+          // 2️⃣ Buscar Summoner info no LoL (BR1 = servidor brasileiro)
+          const summonerResponse = await fetch(
+            `https://br1.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/${conta.puuid}?api_key=${apiKey}`
+          );
+          if (!summonerResponse.ok)
+            throw new Error("Jogador não encontrado no LoL");
+          const summoner = await summonerResponse.json();
+
+          resultado.innerHTML = `
+        <p><strong>Nome:</strong> ${summoner.name ?? conta.gameName}</p>
+        <p><strong>Nível:</strong> ${summoner.summonerLevel}</p>
+        <p><strong>ID:</strong> ${summoner.id ?? "Indisponível"}</p>
+        <p><strong>PUUID:</strong> ${conta.puuid}</p>
+      `;
+          resultado.style.color = "lightgreen";
+        } catch (err) {
+          resultado.textContent = "Erro: " + err.message;
+          resultado.style.color = "red";
+        }
+      }
+    </script>
+  </body>
+</html>

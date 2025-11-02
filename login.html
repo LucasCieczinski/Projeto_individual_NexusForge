@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - NexusForge</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;500&family=Rajdhani:wght@600&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="Styles/style_geral.css" />
+    <link rel="stylesheet" href="Styles/style_login&&cadastro.css" />
+</head>
+
+<body>
+    <header>
+        <div class="header-conteudo">
+            <a href="index.html" class="marca">NexusForge</a>
+            <nav class="menu">
+                <ul>
+                    <li><a href="index.html#inicio">Início</a></li>
+                    <li><a href="index.html#sobre">Sobre</a></li>
+                    <li><a href="riftInsight.html">RiftInsight</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="user-page">
+        <div class="user-container">
+            <h2>Login</h2>
+            <form id="loginForm">
+                <label for="email">E-mail</label>
+                <input type="email" id="ipt_email" placeholder="Digite seu e-mail" required />
+
+                <label for="senha">Senha</label>
+                <input type="password" id="ipt_senha" placeholder="Digite sua senha" required />
+
+                <button onclick="login()" class="button">Entrar</button>
+            </form>
+            <p>Não tem uma conta? <a href="cadastro.html">Cadastre-se aqui</a></p>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer">
+            <p>© 2025 NexusForge. Todos os direitos reservados.</p>
+
+            <div class="icones">
+                <a href="https://github.com" target="_blank" aria-label="GitHub" class="github">
+                    <i class="fa-brands fa-github"></i>
+                </a>
+                <a href="https://discord.com" target="_blank" aria-label="Discord" class="discord">
+                    <i class="fa-brands fa-discord"></i>
+                </a>
+                <a href="https://twitter.com" target="_blank" aria-label="Twitter" class="twitter">
+                    <i class="fa-brands fa-x-twitter"></i>
+                </a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
+<script>
+    function login(){
+        var email = ipt_email.value;
+        var senha = ipt_senha.value;
+
+
+
+    }
+
+    // Executa o botão login ao clicar a tecla ENTER
+  document.addEventListener('keydown', function(event) {
+    if (event.key === 'Enter') {
+      login();
+    }
+  });
+</script>

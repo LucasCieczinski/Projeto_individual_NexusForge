@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RiftInsight - NexusForge</title>
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;500&family=Rajdhani:wght@600&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="Styles/style_geral.css" />
+    <link rel="stylesheet" href="Styles/style_inicial.css" />
+  </head>
+
+  <body>
+    <!-- HEADER -->
+    <header>
+      <div class="header-conteudo">
+        <a href="index.html" class="marca">NexusForge</a>
+        <nav>
+          <ul>
+            <li><a href="index.html#inicio">Início</a></li>
+            <li><a href="index.html#sobre">Sobre</a></li>
+            <li><a href="riftInsight.html" class="ativo">RiftInsight</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <!-- SEÇÃO PRINCIPAL -->
+    <main class="riftinsight">
+      <section class="busca-invocador">
+        <h1>RiftInsight</h1>
+        <p>Descubra seus pontos fortes e fracos analisando seu desempenho no Rift.</p>
+
+        <form id="formBusca">
+          <input
+            type="text"
+            id="summonerName"
+            placeholder="Digite seu nome de invocador"
+            required
+          />
+          <select id="regiao" required>
+            <option value="BR1">BR1 (Brasil)</option>
+            <option value="NA1">NA1 (América do Norte)</option>
+            <option value="EUW1">EUW1 (Europa Oeste)</option>
+          </select>
+          <button type="submit" class="button">Analisar</button>
+        </form>
+      </section>
+
+      <section id="resultado" class="resultado escondido">
+        <div class="perfil">
+          <img id="iconeInvocador" src="" alt="Ícone do Invocador" />
+          <h2 id="nomeInvocador"></h2>
+          <p id="nivelInvocador"></p>
+        </div>
+
+        <div class="estatisticas">
+          <h3>Resumo de Desempenho</h3>
+          <div id="estatisticas-container">
+            <!-- Aqui entraremos com dados via JS -->
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="footer">
+        <p>© 2025 NexusForge. Todos os direitos reservados.</p>
+        <div class="icones">
+          <a href="https://github.com" target="_blank"><i class="fa-brands fa-github"></i></a>
+          <a href="https://discord.com" target="_blank"><i class="fa-brands fa-discord"></i></a>
+          <a href="https://twitter.com" target="_blank"><i class="fa-brands fa-x-twitter"></i></a>
+        </div>
+      </div>
+    </footer>
+
+    <script src="Scripts/riftinsight.js"></script>
+  </body>
+</html>
