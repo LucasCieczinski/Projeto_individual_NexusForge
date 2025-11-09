@@ -1,0 +1,246 @@
+:root {
+  --cor-fundo: #0d0d0e;
+  --cor-secundaria: #151518;
+  --cor-destaque: rgb(181, 176, 33);
+  --destaque-dourado: rgb(191, 161, 87);
+  --texto-principal: #e1dbdb;
+  --texto-secundario: #c9c9c9;
+  --transicao: 0.6s ease;
+  --sombra: 0 0 15px rgba(0, 0, 0, 0.4);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Roboto", sans-serif;
+}
+
+body {
+  background-color: var(--cor-fundo);
+  color: var(--texto-principal);
+  display: flex;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  width: 90px;
+  background: linear-gradient(180deg, #141416, #0e0e0d);
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: var(--sombra);
+  padding: 20px 10px;
+  transition: var(--transicao);
+  overflow: hidden;
+}
+
+.sidebar:hover {
+  width: 240px;
+}
+
+.sidebar .logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 40px;
+  transition: var(--transicao);
+}
+
+.sidebar:hover .logo img {
+  transform: scale(1.05);
+}
+
+.sidebar .logo img {
+  width: 45px;
+  transition: var(--transicao);
+}
+
+.sidebar ul {
+  list-style: none;
+}
+
+.sidebar ul li {
+  position: relative;
+  margin: 15px 0;
+}
+
+.sidebar ul li a {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: var(--texto-secundario);
+  padding: 12px;
+  border-radius: 12px;
+  transition: var(--transicao);
+}
+
+.sidebar ul li a:hover {
+  background: var(--destaque-dourado);
+  color: #fff;
+  transform: translateX(4px);
+}
+
+.sidebar ul li a i {
+  min-width: 40px;
+  font-size: 1.4rem;
+  text-align: center;
+}
+
+.sidebar ul li a span {
+  opacity: 0;
+  white-space: nowrap;
+  transition: var(--transicao);
+}
+
+.sidebar:hover ul li a span {
+  opacity: 1;
+}
+
+.main-content {
+  flex: 1;
+  margin-left: 90px;
+  padding: 40px;
+  transition: var(--transicao);
+}
+
+.sidebar:hover ~ .main-content {
+  margin-left: 240px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
+
+.header h1 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--cor-destaque);
+}
+
+.header .user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--cor-secundaria);
+  padding: 8px 15px;
+  border-radius: 10px;
+  box-shadow: var(--sombra);
+}
+
+.header .user i {
+  font-size: 1.3rem;
+  color: var(--destaque-dourado);
+}
+
+.player-card {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 3rem 0;
+  background-color: rgba(50, 44, 44, 0.5);
+  border-radius: 10px;
+}
+
+.card-frame {
+  position: relative;
+  width: 220px;
+  height: 320px;
+  background: linear-gradient(145deg, #1a1a2e, #13111a);
+  border: 2px solid #7038ff;
+  border-radius: 16px;
+  box-shadow: 0 0 25px rgba(112, 56, 255, 0.4);
+  transition: all 0.3s ease;
+}
+
+.card-frame:hover {
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 0 0 45px rgba(170, 102, 255, 0.6);
+}
+
+.fundo {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #6a00ff, #d400ff, #ff0080);
+  background-image: url(../img/280px-Kayn_Ascended_profileicon.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  opacity: 0.3;
+  filter: blur(2px);
+  z-index: 0;
+}
+
+.info-topo {
+  text-align: center;
+  color: #e3dfff;
+  font-family: 'Poppins', sans-serif;
+  padding: 0.6rem;
+  z-index: 2;
+  position: relative;
+  display: flex;
+  flex-direction: column; 
+  justify-content: flex-start;  
+  padding: 10px;
+}
+
+.info-baixo {
+  text-align: center;
+  color: #e3dfff;
+  font-family: 'Poppins', sans-serif;
+  padding: 0.6rem;
+  z-index: 2;
+  position: relative;
+  display: flex;
+  flex-direction: column; 
+  justify-content: flex-end; 
+  height: 65%; 
+  padding: 10px;
+}
+
+.player-name {
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #cdb4ff;
+  margin-bottom: 0.3rem;
+}
+
+.player-rating {
+  top: 8px;
+  left: 8px;
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: #fff;
+  text-shadow: 0 0 10px #d400ff;
+}
+
+.details p {
+  margin: 4px 0;
+  font-size: 0.9rem;
+  color: #dcd8ff;
+}
+
+.grafico-box{
+    width: 80%;
+    height: 80%;
+  }
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--destaque-dourado);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--cor-destaque);
+}

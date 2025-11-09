@@ -389,7 +389,6 @@ footer p:hover {
 
 /* Responsividade */
 
-/* Telas medias e pequenas */
 @media (max-width: 980px) {
   .header-conteudo {
     justify-content: space-between;
@@ -414,7 +413,6 @@ footer p:hover {
 }
 
 
-/* Telas grandes */
 @media (min-width: 1440px) {
   h1 {
     font-size: 3.5rem;

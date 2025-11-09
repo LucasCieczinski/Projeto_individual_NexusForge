@@ -22,14 +22,13 @@
                 <ul>
                     <li><a href="index.html#inicio">Início</a></li>
                     <li><a href="index.html#sobre">Sobre</a></li>
-                    <li><a href="riftInsight.html">RiftInsight</a></li>
                 </ul>
             </nav>
         </div>
     </header>
 
     <main class="user-page">
-        <div class="user-container">
+        <div class="user-conteudo">
             <h2>Login</h2>
             <form id="loginForm">
                 <label for="email">E-mail</label>
@@ -67,12 +66,7 @@
     function login(){
         var email = ipt_email.value;
         var senha = ipt_senha.value;
-
-
-
     }
-
-    // Executa o botão login ao clicar a tecla ENTER
   document.addEventListener('keydown', function(event) {
     if (event.key === 'Enter') {
       login();

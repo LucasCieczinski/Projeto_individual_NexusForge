@@ -1,88 +1,93 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>RiftInsight - NexusForge</title>
 
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;500&family=Rajdhani:wght@600&display=swap"
-      rel="stylesheet"
-    />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard - NexusForge</title>
+  <link rel="stylesheet" href="Styles/style_dash.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
 
-    <link rel="stylesheet" href="Styles/style_geral.css" />
-    <link rel="stylesheet" href="Styles/style_inicial.css" />
-  </head>
+<body>
+  <nav class="sidebar">
+    <div class="logo">
+      <img src="img/logo-dark.png" alt="Logo">
+    </div>
 
-  <body>
-    <!-- HEADER -->
-    <header>
-      <div class="header-conteudo">
-        <a href="index.html" class="marca">NexusForge</a>
-        <nav>
-          <ul>
-            <li><a href="index.html#inicio">Início</a></li>
-            <li><a href="index.html#sobre">Sobre</a></li>
-            <li><a href="riftInsight.html" class="ativo">RiftInsight</a></li>
-          </ul>
-        </nav>
+    <ul>
+      <li><a href="#"><i class="fa-solid fa-chart-line"></i><span>Desempenho</span></a></li>
+      <li><a href="#"><i class="fa-solid fa-clipboard-list"></i><span>Missões</span></a></li>
+      <li><a href="#"><i class="fa-solid fa-gear"></i><span>Configurações</span></a></li>
+      <li><a href="#"><i class="fa-solid fa-right-from-bracket"></i><span>Sair</span></a></li>
+    </ul>
+  </nav>
+
+  <main class="main-content">
+    <header class="header">
+      <h1>Bem-vindo à sua Dashboard, user</h1>
+      <div class="user">
+        <i class="fa-solid fa-user"></i>
+        <span>user</span>
       </div>
     </header>
 
-    <!-- SEÇÃO PRINCIPAL -->
-    <main class="riftinsight">
-      <section class="busca-invocador">
-        <h1>RiftInsight</h1>
-        <p>Descubra seus pontos fortes e fracos analisando seu desempenho no Rift.</p>
-
-        <form id="formBusca">
-          <input
-            type="text"
-            id="summonerName"
-            placeholder="Digite seu nome de invocador"
-            required
-          />
-          <select id="regiao" required>
-            <option value="BR1">BR1 (Brasil)</option>
-            <option value="NA1">NA1 (América do Norte)</option>
-            <option value="EUW1">EUW1 (Europa Oeste)</option>
-          </select>
-          <button type="submit" class="button">Analisar</button>
-        </form>
-      </section>
-
-      <section id="resultado" class="resultado escondido">
-        <div class="perfil">
-          <img id="iconeInvocador" src="" alt="Ícone do Invocador" />
-          <h2 id="nomeInvocador"></h2>
-          <p id="nivelInvocador"></p>
+    <section class="player-card">
+      <div class="card-frame">
+        <div class="fundo"></div>
+        <div class="info-topo">
+          <span class="player-rating">88</span>
+          <h2 class="player-name">INVOKERX</h2>
         </div>
-
-        <div class="estatisticas">
-          <h3>Resumo de Desempenho</h3>
-          <div id="estatisticas-container">
-            <!-- Aqui entraremos com dados via JS -->
+        <div class="info-baixo">
+          <div class="details">
+            <p><strong>Campeão:</strong> Ahri</p>
+            <p><strong>KDA Médio:</strong> 3.2</p>
+            <p><strong>Taxa de Vitória:</strong> 62%</p>
           </div>
         </div>
-      </section>
-    </main>
-
-    <!-- FOOTER -->
-    <footer>
-      <div class="footer">
-        <p>© 2025 NexusForge. Todos os direitos reservados.</p>
-        <div class="icones">
-          <a href="https://github.com" target="_blank"><i class="fa-brands fa-github"></i></a>
-          <a href="https://discord.com" target="_blank"><i class="fa-brands fa-discord"></i></a>
-          <a href="https://twitter.com" target="_blank"><i class="fa-brands fa-x-twitter"></i></a>
-        </div>
       </div>
-    </footer>
+      <div class="grafico-box" style="position: relative; height:400px; width: 400px;">
+        <canvas id="player-status"></canvas>
+      </div>
+    </section>
 
-    <script src="Scripts/riftinsight.js"></script>
-  </body>
+    <section>
+      <div>
+
+      </div>  
+    </section>
+
+  </main>
+  <script src="radar.JS"></script>
+</body>
 </html>
+<script>
+  function obterDados(){
+    // Dados necessarios: 
+    // idRiot
+    // Icone do Jogador e o id do Icone
+    // Dados das ultimas 20 partidas:
+    // Vitoria ou derrota (Boolean)
+    // CS da partida
+    // Dano por minuto
+    // Objetivos feitos
+    // Gold por minuto
+    // Placar de visão
+    // KDA
+    // Duração de partida???
+
+
+    
+
+
+
+
+  }
+
+
+
+  
+</script>

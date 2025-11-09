@@ -22,7 +22,7 @@
   color: var(--texto-primario);
 }
 
-.user-container {
+.user-conteudo {
   background: rgba(25, 27, 35, 0.9);
   padding: 40px 35px;
   border-radius: 16px;
@@ -31,14 +31,14 @@
   box-shadow: 0 0 30px rgba(58, 155, 220, 0.3);
 }
 
-.user-container h2 {
+.user-conteudo h2 {
   font-family: "Cinzel Decorative", serif;
   color: var(--destaque-dourado);
   margin-bottom: 25px;
   font-size: 2rem;
 }
 
-.user-container label {
+.user-conteudo label {
   display: block;
   margin-top: 15px;
   margin-bottom: 5px;
@@ -47,7 +47,7 @@
   font-weight: 500;
 }
 
-.user-container input {
+.user-conteudo input {
   width: 100%;
   padding: 10px 14px;
   border-radius: 8px;
@@ -58,13 +58,13 @@
   font-family: "Rajdhani", sans-serif;
 }
 
-.user-container input:focus {
+.user-conteudo input:focus {
   outline: none;
   border-color: var(--destaque-dourado);
   box-shadow: 0 0 8px rgba(200, 170, 110, 0.6);
 }
 
-.user-container .button {
+.user-conteudo .button {
   margin-top: 25px;
   width: 100%;
   padding: 12px 0;
@@ -78,23 +78,23 @@
   transition: all 0.3s ease;
 }
 
-.user-container .button:hover {
+.user-conteudo .button:hover {
   background: #e0c88e;
 }
 
-.user-container p {
+.user-conteudo p {
   margin-top: 15px;
   font-size: 0.9rem;
   color: #cdd2da;
 }
 
-.user-container p a {
+.user-conteudo p a {
   color: var(--destaque-dourado);
   text-decoration: none;
   font-weight: 600;
 }
 
-.user-container p a:hover {
+.user-conteudo p a:hover {
   text-decoration: underline;
 }
 

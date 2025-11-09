@@ -57,14 +57,12 @@
             return;
           }
 
-          // 1️⃣ Buscar conta pela Riot ID
           const contaResponse = await fetch(
             `https://americas.api.riotgames.com/riot/account/v1/accounts/by-riot-id/${nome}/${tag}?api_key=${apiKey}`
           );
           if (!contaResponse.ok) throw new Error("Conta não encontrada");
           const conta = await contaResponse.json();
 
-          // 2️⃣ Buscar Summoner info no LoL (BR1 = servidor brasileiro)
           const summonerResponse = await fetch(
             `https://br1.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/${conta.puuid}?api_key=${apiKey}`
           );

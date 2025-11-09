@@ -15,11 +15,12 @@ app.get("/summoner/:name", async (req, res) => {
   const summonerName = req.params.name;
   const apiKey = process.env.RIOT_API_KEY; // segura no .env
   const region = "br1";
+  const summonerRank = req.params.rank;
 
   try {
     const response = await fetch(
       `https://${region}.api.riotgames.com/lol/summoner/v4/summoners/by-name/${encodeURIComponent(
-        summonerName
+        summonerName, summonerRank
       )}?api_key=${apiKey}`
     );
 

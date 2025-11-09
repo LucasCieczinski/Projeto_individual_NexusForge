@@ -38,9 +38,6 @@ header {
   text-align: center;
 }
 
-/*
-Flex-box estiliza os elementos filhos atraves do elemento pai
-*/
 main {
   padding: 2rem;
   display: flex;
@@ -107,6 +104,8 @@ header {
 }
 
 .header-conteudo a {
+  display: flex;
+  justify-content: center;
   text-decoration: none;
   position: relative;
   font-family: "Rajdhani", sans-serif;
@@ -168,10 +167,7 @@ nav ul {
   color: #000;
 }
 
-.botoes-user .cadastro {
-  background-color: var(--destaque-dourado, #c8aa6e);
-  color: #000;
-}
+
 
 .botoes-user .cadastro:hover {
   background-color: #e0c88e;
@@ -190,7 +186,7 @@ footer {
   animation: animacaoFooter 2s ease-out forwards;
   opacity: 1;
   transform: translateY(40px);
-  animation-delay: 0.3s;
+  animation-delay: 0.65s;
   z-index: 1;
 }
 
@@ -324,3 +320,5 @@ footer p:hover {
   transform: scale(1.1);
   filter: brightness(1.3);
 }
+
+
