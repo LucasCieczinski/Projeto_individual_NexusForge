@@ -12,6 +12,7 @@
         rel="stylesheet" />
     <link rel="stylesheet" href="Styles/style_geral.css" />
     <link rel="stylesheet" href="Styles/style_login&&cadastro.css" />
+    <script src="sessao.js"></script>
 </head>
 
 <body>
@@ -28,19 +29,20 @@
     </header>
 
     <main class="user-page">
-        <div class="user-conteudo">
-            <h2>Login</h2>
-            <form id="loginForm">
-                <label for="email">E-mail</label>
-                <input type="email" id="ipt_email" placeholder="Digite seu e-mail" required />
+            <div class="user-conteudo">
+                <h2>Login</h2>
+                <div id="loginForm">
+                    <label for="ipt_email">E-mail</label>
+                    <input type="email" id="ipt_email" placeholder="Digite seu e-mail" />
 
-                <label for="senha">Senha</label>
-                <input type="password" id="ipt_senha" placeholder="Digite sua senha" required />
+                    <label for="ipt_senha">Senha</label>
+                    <input type="password" id="ipt_senha" placeholder="Digite sua senha" />
 
-                <button onclick="login()" class="button">Entrar</button>
-            </form>
-            <p>Não tem uma conta? <a href="cadastro.html">Cadastre-se aqui</a></p>
-        </div>
+                    <button onclick="entrar()" class="button">Entrar</button>
+                </div>
+                <div id="mensagem_erro" class="cardErro"></div>
+                <p>Não tem uma conta? <a href="cadastro.html">Cadastre-se aqui</a></p>
+            </div>
     </main>
 
     <footer>
@@ -61,15 +63,71 @@
         </div>
     </footer>
 </body>
+
 </html>
 <script>
-    function login(){
-        var email = ipt_email.value;
-        var senha = ipt_senha.value;
+    function entrar() {
+
+        var emailVar = ipt_email.value;
+        var senhaVar = ipt_senha.value;
+
+        if (emailVar == "" || senhaVar == "") {
+            mensagem_erro.innerHTML = "(Mensagem de erro para todos os campos em branco)";
+            return false;
+        }
+        else {
+            setInterval(5000)
+        }
+
+
+        fetch("/usuarios/autenticar", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                emailServer: emailVar,
+                senhaServer: senhaVar
+            })
+        }).then(function (resposta) {
+            console.log("ESTOU NO THEN DO entrar()!")
+
+            if (resposta.ok) {
+                console.log(resposta);
+
+                resposta.json().then(json => {
+                    console.log(json);
+                    // console.log(JSON.stringify(json));
+                    // sessionStorage.EMAIL_USUARIO = json.email;
+                    // sessionStorage.NOME_USUARIO = json.nome;
+                    // sessionStorage.ID_USUARIO = json.id;
+                    // sessionStorage.AQUARIOS = JSON.stringify(json.aquarios)
+
+                    setTimeout(function () {
+                        //window.location = "/riftinsight.html";
+                    }, 1000); // apenas para exibir o loading
+
+                });
+
+            } else {
+
+                console.log("Houve um erro ao tentar realizar o login!");
+
+                resposta.text().then(texto => {
+                    console.error(texto);
+                });
+            }
+
+        }).catch(function (erro) {
+            console.log(erro);
+        })
+
+        return false;
     }
-  document.addEventListener('keydown', function(event) {
-    if (event.key === 'Enter') {
-      login();
-    }
-  });
+
+    document.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter') {
+            login();
+        }
+    });
 </script>

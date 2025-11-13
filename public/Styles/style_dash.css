@@ -1,5 +1,5 @@
 :root {
-  --cor-fundo: #0d0d0e;
+  --cor-fundo: rgb(13, 13, 14);
   --cor-secundaria: #151518;
   --cor-destaque: rgb(181, 176, 33);
   --destaque-dourado: rgb(191, 161, 87);
@@ -17,7 +17,9 @@
 }
 
 body {
-  background-color: var(--cor-fundo);
+  background-image: url(../img/logo-dark.png);
+  background-size: cover;
+  background-position: center;
   color: var(--texto-principal);
   display: flex;
   min-height: 100vh;
@@ -105,6 +107,7 @@ body {
   margin-left: 90px;
   padding: 40px;
   transition: var(--transicao);
+  background-color: rgba(13, 13, 14, 0.5);
 }
 
 .sidebar:hover ~ .main-content {
@@ -144,8 +147,9 @@ body {
   justify-content: space-around;
   align-items: center;
   padding: 3rem 0;
-  background-color: rgba(50, 44, 44, 0.5);
+  background-color: rgba(18, 18, 18, 0.8);
   border-radius: 10px;
+  min-height: 79vh;
 }
 
 .card-frame {
@@ -167,8 +171,6 @@ body {
 .fundo {
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, #6a00ff, #d400ff, #ff0080);
-  background-image: url(../img/280px-Kayn_Ascended_profileicon.png);
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
