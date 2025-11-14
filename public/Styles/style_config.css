@@ -127,13 +127,37 @@ body {
 }
 
 .bloco-conta {
-    background-color: rgba(18, 18, 18, 0.8);
-    border-radius: 10px;
+    background-color: rgba(10, 10, 10, 0.85);
     min-height: 79vh;
-    padding: 3rem 0;
+    border-radius: 16px;
+    padding: 2.5rem 3rem;
+    box-shadow: 0 0 30px rgba(0,0,0,0.6);
 }
 
 .bloco-conta h2 {
-    margin-left: 3.5rem;
+  margin-bottom: 1.8rem;
+  font-size: 1.5rem;
+}
+
+/* Inputs */
+.bloco-conta div {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.bloco-conta input {
+  width: 50%;             /* Se adapta ao bloco */
+  padding: 12px;
+  background: #0b0b0c;
+  border: 1px solid #2e2e2e;
+  color: var(--texto-principal);
+  border-radius: 8px;
+}
+
+.bloco-conta input:focus {
+  border-color: var(--destaque-dourado);
+  box-shadow: 0 0 8px rgba(191,161,87,0.4);
+  outline: none;
 }
 

@@ -21,23 +21,23 @@ function autenticar(req, res) {
                         console.log('1:', resultadoAutenticar);
                         console.log('2:', resultadoAutenticar[0]);
 
-                        res.status(200).send(resultadoAutenticar[0]);
+                       // res.status(200).send(resultadoAutenticar[0]);
 
-                        // // aquarioModel.buscarAquariosPorEmpresa(resultadoAutenticar[0].empresaId)
-                        // //    .then((resultadoAquarios) => {
-                        // //        if (resultadoAquarios.length > 0) {
-                        // //            res.json({
-                        // //                idUsuario: resultadoAutenticar[0].idUsuario,
-                        // //                email: resultadoAutenticar[0].email,
-                        // //                username: resultadoAutenticar[0].username,
-                        // //                senha: resultadoAutenticar[0].senha,
-                        // //                 riotAccount: resultadoAutenticar[0].riotAccount,
-                        // //                 riotTag: resultadoAutenticar[0].riotTag
-                        // //             });
-                        //        } else {
-                        //            res.status(204).json({ aquarios: [] });
-                        //         }
-                        //     })
+                        aquarioModel.buscarAquariosPorEmpresa(resultadoAutenticar[0].idUsuario)
+                           .then((resultadoAquarios) => {
+                               if (resultadoAquarios.length > 0) {
+                                   res.json({
+                                       idUsuario: resultadoAutenticar[0].idUsuario,
+                                       email: resultadoAutenticar[0].email,
+                                       username: resultadoAutenticar[0].username,
+                                       senha: resultadoAutenticar[0].senha,
+                                        riotAccount: resultadoAutenticar[0].riotAccount,
+                                        riotTag: resultadoAutenticar[0].riotTag
+                                    });
+                               } else {
+                                   res.status(204).json({ aquarios: [] });
+                                }
+                            })
                     } else if (resultadoAutenticar.length == 0) {
                         res.status(403).send("Email e/ou senha inválido(s)");
                     } else {

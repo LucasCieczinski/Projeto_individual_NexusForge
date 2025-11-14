@@ -1,90 +1,4 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dashboard - NexusForge</title>
-  <link rel="stylesheet" href="Styles/style_dash.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="sessao.js"></script>
-</head>
-
-<body onload="iniciarDashboard()">
-  <nav class="sidebar">
-    <div class="logo">
-      <img src="img/logo-dark.png" alt="Logo">
-    </div>
-
-    <ul>
-      <li><a href="#"><i class="fa-solid fa-chart-line"></i><span>Desempenho</span></a></li>
-      <li><a href="#"><i class="fa-solid fa-clipboard-list"></i><span>Missões</span></a></li>
-      <li><a href="config.html"><i class="fa-solid fa-gear"></i><span>Configurações</span></a></li>
-      <li><a href="#" onclick="limparSessao()"><i class="fa-solid fa-right-from-bracket"></i><span>Sair</span></a></li>
-    </ul>
-  </nav>
-
-  <main class="main-content">
-    <div class="loading" id="loading">
-      <div class="loading-box">
-        <div class="loading-brilho"></div>
-        <div class="loading-borda"></div>
-        <div class="loading-icon"></div>
-      </div>
-    </div>
-    <header class="header">
-      <h1>Bem-vindo à sua Dashboard, user</h1>
-      <div class="user">
-        <i class="fa-solid fa-user"></i>
-        <span>user</span>
-      </div>
-    </header>
-
-    <section class="player-card">
-      <div class="card-frame">
-        <div class="fundo"></div>
-        <div class="info-topo">
-          <span class="player-rating">88</span>
-          <h2 class="player-name">INVOKERX</h2>
-        </div>
-        <div class="info-baixo">
-          <div class="details">
-            <p><strong>Campeão:</strong> Ahri</p>
-            <p><strong>KDA Médio:</strong> 3.2</p>
-            <p><strong>Taxa de Vitória:</strong> 62%</p>
-          </div>
-        </div>
-      </div>
-      <div class="grafico-box" style="position: relative; height:400px; width: 400px;">
-        <canvas id="player-status"></canvas>
-      </div>
-    </section>
-
-    <section>
-      <div id="resultado">
-
-      </div>
-    </section>
-
-  </main>
-  <script src="radar.JS"></script>
-</body>
-
-</html>
-<script>
-  async function iniciarDashboard() {
-    try {
-      document.getElementById("loading").style.display = "flex";
-      await obterDados();
-
-    } finally {
-      document.getElementById("loading").style.display = "none";
-    }
-  }
-
-  async function obterDados() {
+async function obterDados() {
     // Dados necessarios: 
     // idRiot .OK
     // Icone do Jogador e o id do Icone .OK
@@ -175,5 +89,5 @@
       resultado.textContent = "Erro: " + err.message;
       resultado.style.color = "red";
     }
-  }
-</script>
+
+}

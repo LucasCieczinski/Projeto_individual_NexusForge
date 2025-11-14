@@ -29,20 +29,27 @@
     </header>
 
     <main class="user-page">
-            <div class="user-conteudo">
-                <h2>Login</h2>
-                <div id="loginForm">
-                    <label for="ipt_email">E-mail</label>
-                    <input type="email" id="ipt_email" placeholder="Digite seu e-mail" />
-
-                    <label for="ipt_senha">Senha</label>
-                    <input type="password" id="ipt_senha" placeholder="Digite sua senha" />
-
-                    <button onclick="entrar()" class="button">Entrar</button>
-                </div>
-                <div id="mensagem_erro" class="cardErro"></div>
-                <p>Não tem uma conta? <a href="cadastro.html">Cadastre-se aqui</a></p>
+        <div class="loading" id="loading">
+            <div class="loading-box">
+                <div class="loading-brilho"></div>
+                <div class="loading-borda"></div>
+                <div class="loading-icon"></div>
             </div>
+        </div>
+        <div class="user-conteudo">
+            <h2>Login</h2>
+            <div id="loginForm">
+                <label for="ipt_email">E-mail</label>
+                <input type="email" id="ipt_email" placeholder="Digite seu e-mail" maxlength="100" />
+
+                <label for="ipt_senha">Senha</label>
+                <input type="password" id="ipt_senha" placeholder="Digite sua senha" maxlength="20" />
+
+                <button onclick="entrar()" class="button">Entrar</button>
+            </div>
+            <div id="mensagem_erro" class="cardErro"></div>
+            <p>Não tem uma conta? <a href="cadastro.html">Cadastre-se aqui</a></p>
+        </div>
     </main>
 
     <footer>
@@ -71,12 +78,17 @@
         var emailVar = ipt_email.value;
         var senhaVar = ipt_senha.value;
 
-        if (emailVar == "" || senhaVar == "") {
-            mensagem_erro.innerHTML = "(Mensagem de erro para todos os campos em branco)";
+        if (emailVar == "" || senhaVar == "" || emailVar.length > 100 || senhaVar.length > 20) {
+            ipt_email.style.border = "1px solid red";
+            ipt_senha.style.border = "1px solid red";
+            mensagem_erro.style.opacity = "1";
+            mensagem_erro.innerHTML = "Preencha os campos corretamente!";
             return false;
         }
         else {
-            setInterval(5000)
+            ipt_email.style.border = "0.5px solid rgb(94, 106, 113)";
+            ipt_senha.style.border = "0.5px solid rgb(94, 106, 113)";
+            mensagem_erro.style.opacity = "0";
         }
 
 
@@ -97,14 +109,22 @@
 
                 resposta.json().then(json => {
                     console.log(json);
-                    // console.log(JSON.stringify(json));
-                    // sessionStorage.EMAIL_USUARIO = json.email;
-                    // sessionStorage.NOME_USUARIO = json.nome;
-                    // sessionStorage.ID_USUARIO = json.id;
-                    // sessionStorage.AQUARIOS = JSON.stringify(json.aquarios)
+                    console.log(JSON.stringify(json));
+                    sessionStorage.EMAIL_USUARIO = json.email;
+                    sessionStorage.NOME_USUARIO = json.nome;
+                    sessionStorage.ID_USUARIO = json.id;
+                    sessionStorage.RIOT_ACCOUNT = json.riotAccount;
+                    sessionStorage.RIOT_TAG = json.riotTag;
+                    mensagem_erro.innerHTML =
+                        "Login realizado com sucesso! Redirecionando para Dashboard...";
+                    mensagem_erro.style.opacity = "1";
+                    var loading = document.getElementById('loading');
+                    loading.style.display = 'flex';
 
                     setTimeout(function () {
-                        //window.location = "/riftinsight.html";
+                        window.location = "/riftinsight.html";
+                        loading.style.display = 'none';
+                        mensagem_erro.style.opacity = "0";
                     }, 1000); // apenas para exibir o loading
 
                 });
@@ -115,6 +135,7 @@
 
                 resposta.text().then(texto => {
                     console.error(texto);
+                    mensagem_erro.innerHTML = "Email ou/e senha estão incorretos!";
                 });
             }
 
@@ -127,7 +148,7 @@
 
     document.addEventListener('keydown', function (event) {
         if (event.key === 'Enter') {
-            login();
+            entrar();
         }
     });
 </script>
