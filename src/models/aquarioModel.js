@@ -2,7 +2,7 @@ var database = require("../database/config");
 
 function buscarAquariosPorEmpresa(idUsuario) {
 
-  var instrucaoSql = `SELECT riotAccount, riotTag FROM usuario WHERE idUsuario = ${idUsuario}`;
+  var instrucaoSql = `SELECT idUsuario, username, riotAccount, riotTag FROM usuario WHERE idUsuario = ${idUsuario}`;
 
   console.log("Executando a instrução SQL: \n" + instrucaoSql);
   return database.executar(instrucaoSql);

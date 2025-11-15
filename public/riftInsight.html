@@ -15,8 +15,8 @@
 <body onload="iniciarDashboard()">
   <nav class="sidebar">
     <div class="logo">
-      <img src="img/logo-dark.png" alt="Logo">
-    </div>
+  <div class="logo-texto">NexusForge</div>
+</div>
 
     <ul>
       <li><a href="#"><i class="fa-solid fa-chart-line"></i><span>Desempenho</span></a></li>
@@ -35,36 +35,59 @@
       </div>
     </div>
     <header class="header">
-      <h1>Bem-vindo à sua Dashboard, user</h1>
-      <div class="user">
-        <i class="fa-solid fa-user"></i>
-        <span>user</span>
-      </div>
+      <h1>Bem-vindo, <strong id="id_user"></strong> </h1>
     </header>
 
     <section class="player-card">
       <div class="card-frame">
         <div class="fundo"></div>
         <div class="info-topo">
-          <span class="player-rating">88</span>
-          <h2 class="player-name">INVOKERX</h2>
+          <span class="player-rating" id="id_nota"></span>
+          <h2 class="player-name" id="id_name"></h2>
         </div>
         <div class="info-baixo">
           <div class="details">
-            <p><strong>Campeão:</strong> Ahri</p>
-            <p><strong>KDA Médio:</strong> 3.2</p>
-            <p><strong>Taxa de Vitória:</strong> 62%</p>
+            <p><strong>Campeão:</strong> <span id="id_champ"></span></p>
+            <p><strong>KDA Médio:</strong> <span id="id_kdaM"></span> </p>
+            <p><strong>Taxa de Vitória:</strong> <span id="id_Winrate"></span> </p>
           </div>
         </div>
       </div>
-      <div class="grafico-box" style="position: relative; height:400px; width: 400px;">
+      <div class="grafico-box">
+        <h2 class="titulo-grafico">Gráfico de Desempenho</h2>
         <canvas id="player-status"></canvas>
       </div>
     </section>
 
-    <section>
-      <div id="resultado">
+    <section class="status">
+      <h2 class="status-titulo"><i class="fa-solid fa-chart-simple"></i> Resultados da última partida</h2>
 
+      <div class="status-container">
+
+        <div class="status-card">
+          <span class="status-value" id="id_GPM">--</span>
+          <span class="status-label">Ouro por Minuto</span>
+        </div>
+
+        <div class="status-card">
+          <span class="status-value" id="id_KDA">--</span>
+          <span class="status-label">KDA</span>
+        </div>
+
+        <div class="status-card">
+          <span class="status-value" id="id_vision">--</span>
+          <span class="status-label">Visão</span>
+        </div>
+
+        <div class="status-card">
+          <span class="status-value" id="id_DPM">--</span>
+          <span class="status-label">Dano por minuto</span>
+        </div>
+
+        <div class="status-card">
+          <span class="status-value" id="id_CS">--</span>
+          <span class="status-label">CS</span>
+        </div>
       </div>
     </section>
 
@@ -99,7 +122,9 @@
     // Duração de partida???
     const riotAccount = sessionStorage.RIOT_ACCOUNT;
     const riotId = sessionStorage.RIOT_TAG;
-    const apiKey = 'RGAPI-4f82a092-1aeb-4365-b477-c15f961269f1';
+    // const riotAccount = "KatenKyokotsu";
+    // const riotId = 'Shied';
+    const apiKey = 'RGAPI-7ea8fcd9-d16c-4a59-94d5-5e75307e0bb6';
 
     try {
       // Adquiri o nome e tag do usuario
@@ -141,39 +166,167 @@
         throw new Error("Nenhuma partida encontrada");
       const partida = await partidaResponse.json();
 
-      // a posição [0] é sempre a mais recente
-      var partida1 = partida[0];
-      console.log(partida1)
 
-      // Adquiri os dados das partidas
-      const dadosResponse = await fetch(
-        `https://americas.api.riotgames.com/lol/match/v5/matches/${partida1}?api_key=${apiKey}`
-      );
-      if (!dadosResponse.ok)
-        throw new Error("Não foi possivel adquirir os dados das partidas");
-      const dados = await dadosResponse.json();
-      console.log(dados)
+      //  Adquiri os dados das 20 partidas (1 requisição por vez em um delay de 270ms +ou-)
 
-      // Variavel dos dados que serão usados
+      async function delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+      }
+
+      const partidasDetalhes = [];
+
+      for (let i = 0; i < partida.length; i++) {
+        const matchId = partida[i];
+
+        const res = await fetch(
+          `https://americas.api.riotgames.com/lol/match/v5/matches/${matchId}?api_key=${apiKey}`
+        );
+        const dadosMatch = await res.json();
+
+        partidasDetalhes.push(dadosMatch);
+
+        await delay(70);
+      }
+
+
+      //  Filtra o jogador e adquiri os dados dele
+
+      const minhasPartidas = partidasDetalhes.map(match => {
+        const p = match.info.participants.find(x => x.puuid === conta.puuid);
+
+        return {
+          champion: p.championName,
+          win: p.win,
+          kills: p.kills,
+          deaths: p.deaths,
+          assists: p.assists,
+          kda: Number(((p.kills + p.assists) / Math.max(1, p.deaths)).toFixed(2)),
+          cs: p.totalMinionsKilled + p.neutralMinionsKilled,
+          damagePerMinute: p.challenges.damagePerMinute,
+          goldPerMinute: p.challenges.goldPerMinute,
+          visionScore: p.visionScore,
+          objectives: p.challenges.objectiveControlPercentage,
+          gameDuration: Number((match.info.gameDuration / 60).toFixed(2))
+        };
+      });
+
+      id_CS.innerHTML = `${(minhasPartidas[0].cs).toFixed(2)}`;
+      id_DPM.innerHTML = `${(minhasPartidas[0].damagePerMinute).toFixed(2)}`;
+      id_GPM.innerHTML = `${(minhasPartidas[0].goldPerMinute).toFixed(2)}`;
+      id_vision.innerHTML = `${(minhasPartidas[0].visionScore).toFixed(2)}`;
+      id_KDA.innerHTML = `${(minhasPartidas[0].kda).toFixed(2)}`;
+
+      // Soma dos Dados das 20 partidas
+
+      const dadosSoma = {
+        kda: 0,
+        cs: 0,
+        dpm: 0,
+        gpm: 0,
+        vision: 0,
+        objectives: 0
+      }
+      for (var j = 0; j < minhasPartidas.length; j++) {
+        dadosSoma.kda += minhasPartidas[j].kda;
+        dadosSoma.cs += (minhasPartidas[j].cs / minhasPartidas[j].gameDuration);
+        dadosSoma.dpm += minhasPartidas[j].damagePerMinute;
+        dadosSoma.gpm += minhasPartidas[j].goldPerMinute;
+        dadosSoma.vision += minhasPartidas[j].visionScore;
+        dadosSoma.objectives += minhasPartidas[j].objectives;
+      }
+
+      // Média das Somas
+
+      const qtd = minhasPartidas.length;
+
+      const medias = {
+        kda: Number((dadosSoma.kda / qtd).toFixed(2)),
+        cs: Number((dadosSoma.cs / qtd).toFixed(2)),
+        dpm: Number((dadosSoma.dpm / qtd).toFixed(2)),
+        gpm: Number((dadosSoma.gpm / qtd).toFixed(2)),
+        vision: Number((dadosSoma.vision / qtd).toFixed(2)),
+        objectives: dadosSoma.objectives / qtd
+      };
+
+      window.medias = medias;
+      document.dispatchEvent(new CustomEvent("mediasProntas"));
+      console.log(dadosSoma, medias)
+
+
+      // Inserção do nome do usuario na pagina
+      id_user.innerHTML = sessionStorage.NOME_USUARIO;
+      id_name.innerHTML = sessionStorage.RIOT_ACCOUNT;
 
 
 
 
-      resultado.innerHTML = `
-        <p><strong>Nome:</strong> ${summoner.name ?? conta.gameName}</p>
-        <p><strong>Icone:</strong> ${summoner.profileIconId}</p>
-        <p><strong>Nível:</strong> ${summoner.summonerLevel}</p>
-        <p><strong>PUUID:</strong> ${conta.puuid}</p>
-        <p><strong>${partida.length}</strong></p>
-        <p><strong>Resultado:</strong> ${dados.endOfGameResult}</p>
-        ${dados.info.gameVersion}
-        ${dados.info.participants[0].championName}
-      `;
-      resultado.style.color = "lightgreen";
+      // Inserção da nota do Usuario
+
+      const pesos = {
+        kda: 0.10,
+        cs: 0.20,
+        dpm: 0.20,
+        gpm: 0.30,
+        vision: 0.20,
+      };
+
+      const ideal = {
+        kda: 3,
+        cs: 10,
+        dpm: 600,
+        gpm: 400,
+        vision: 30
+      };
+
+      function score(real, ideal) {
+        return Math.min(real / ideal, 1);
+      }
+
+      const nota =
+        score(medias.kda, ideal.kda) * pesos.kda +
+        score(medias.cs, ideal.cs) * pesos.cs +
+        score(medias.dpm, ideal.dpm) * pesos.dpm +
+        score(medias.gpm, ideal.gpm) * pesos.gpm +
+        score(medias.vision, ideal.vision) * pesos.vision;
+
+      const notaFinal = Math.round(nota * 100);
+      console.log(notaFinal);
+      id_nota.innerHTML = `${notaFinal}`
+
+
+      // Dados do card
+
+      // Campeão mais jogado
+      var contador = {};
+      var maisJogado = "";
+      var maiorQtd = 0;
+
+      for (var c = 0; c < minhasPartidas.length; c++) {
+        const champ = minhasPartidas[c].champion;
+        contador[champ] = (contador[champ] || 0) + 1;
+
+        if (contador[champ] > maiorQtd) {
+          maiorQtd = contador[champ];
+          maisJogado = champ;
+        }
+      }
+
+      // Calculo de Taxa de Vitória
+      const vitorias = minhasPartidas.filter(p => p.win).length;
+      const winrate = ((vitorias / minhasPartidas.length) * 100).toFixed(1);
+
+      // === KDA Médio ===
+      const kdaMedio = medias.kda.toFixed(2);
+
+      id_champ.innerHTML = maisJogado;
+      id_kdaM.innerHTML = kdaMedio;
+      id_Winrate.innerHTML = `${winrate}%`;
+
 
     } catch (err) {
       resultado.textContent = "Erro: " + err.message;
       resultado.style.color = "red";
     }
+
   }
 </script>

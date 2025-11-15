@@ -1,96 +1,86 @@
-const data = {
-  labels: [
-    "KDA",
-    "Dano por minuto",
-    "Ouro por minuto",
-    "Visão",
-    "Objetivos",
-    "CS",
-  ],
-  datasets: [
-    {
-      label: "Jogador",
-      data: [45, 50, 50, 50, 50, 50],
-      fill: true,
-      borderColor: "rgba(181, 176, 33, 1)",
-      backgroundColor: "rgba(181, 176, 33, 0.5)",
-      pointBackgroundColor: "rgb(181, 176, 33)",
-      pointBorderColor: "#fff",
-      pointHoverBackgroundColor: "#fff",
-      pointHoverBorderColor: "rgb(181, 176, 33)",
-    },
-    {
-      label: "Média do elo",
-      data: [70, 60, 75, 72, 71, 65],
-      fill: true,
-      borderColor: "rgba(112, 56, 255, 1)",
-      backgroundColor: "rgba(112, 56, 255, 0.5)",
-      pointBackgroundColor: "rgb(164, 109, 228)",
-      pointBorderColor: "#fff",
-      pointHoverBackgroundColor: "#fff",
-      pointHoverBorderColor: "rgb(164, 109, 228)",
-    },
-  ],
-};
+document.addEventListener("mediasProntas", () => {
+  const m = window.medias;
 
-
-const config = {
-  type: "radar",
-  data: data,
-  options: {
-    responsive: true,
-    maintainAspectRatio: true,
-    aspectRatio: 1,
-    scales: {
-      r: {
-        angleLines: {
-          color: "rgb(60, 60, 60)",
-        },
-        grid: {
-          color: 'rgb(60, 60, 60)'
-        }, 
-        pointLabels: {
-          color: 'white',
-          font: {
-            size: 10,
-            weight: 'bold'
-          },
-        },
-        min: 0,
-        max: 100,
-        ticks: {
-          beginAtZero: true,
-          display: false,
-        },
-      },
-    },
-    elements: {
-      line: {
-        borderWidth: 2,
-      },
-    },
-    plugins: {
-    legend: {
-        display: true,
-        position: 'bottom',
-      labels: {
-        font: {
-            size: 12,
-        }
-      }
-    },
-    title: {
-        display: true, 
-        text: 'Gráfico de Desempenho', 
-        color: 'rgb(191, 161, 87)', 
-        font: { 
-          size: 18,
-          weight: 'bold'
-        },
-    }
-  }
-},
+  const limites = {
+    kda: 5,
+    dpm: 1000,
+    gpm: 600,
+    vision: 70,
+    cs: 10,
   };
 
-const ctx = document.getElementById("player-status");
-const chart = new Chart(ctx, config);
+  function normalizar(valor, maximo) {
+    return Math.min((valor / maximo) * 100, 100);
+  }
+
+  const playerData = [
+    normalizar(m.kda, limites.kda),
+    normalizar(m.dpm, limites.dpm),
+    normalizar(m.gpm, limites.gpm),
+    normalizar(m.vision, limites.vision),
+    normalizar(m.cs, limites.cs),
+  ];
+
+  const maiorValor = Math.max(...playerData);
+  const limiteAjustado = Math.max(maiorValor * 1.25, 40);
+
+  const data = {
+    labels: ["KDA", "Dano por minuto", "Ouro por minuto", "Visão", "CS"],
+    datasets: [
+      {
+        label: "Jogador",
+
+        data: playerData,
+        fill: true,
+        backgroundColor: "rgba(191, 161, 87, 0.22)",
+        borderColor: "rgba(191, 161, 87, 0.95)",
+        borderWidth: 2.2,
+        pointBackgroundColor: "#7038ff",
+        pointBorderColor: "#fff",
+        pointHoverBackgroundColor: "#fff",
+        pointHoverBorderColor: "#7038ff",
+        pointRadius: 2,
+        pointHoverRadius: 3,
+      },
+    ],
+  };
+
+  const config = {
+    type: "radar",
+    data: data,
+    options: {
+      responsive: true,
+      aspectRatio: 1,
+      animations: {
+        tension: { duration: 1700, easing: "easeInOutQuart" },
+      },
+
+      scales: {
+        r: {
+          min: 0,
+          max: limiteAjustado,
+          ticks: { display: false },
+          grid: {
+            color: "rgba(255,255,255,0.05)",
+            lineWidth: 1,
+          },
+          angleLines: {
+            color: "rgba(255,255,255,0.08)",
+            lineWidth: 1.1,
+          },
+          pointLabels: {
+            color: "rgb(191, 161, 87)",
+            font: { size: 14, weight: "600" },
+            padding: 10,
+          },
+        },
+      },
+      plugins: {
+        legend: { display: false },
+      },
+    },
+  };
+
+  const ctx = document.getElementById("player-status");
+  const chart = new Chart(ctx, config);
+});
