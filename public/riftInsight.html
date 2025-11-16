@@ -108,23 +108,9 @@
   }
 
   async function obterDados() {
-    // Dados necessarios: 
-    // idRiot .OK
-    // Icone do Jogador e o id do Icone .OK
-    // Dados das ultimas 20 partidas:
-    // Vitoria ou derrota (Boolean)
-    // CS da partida
-    // Dano por minuto
-    // Objetivos feitos
-    // Gold por minuto
-    // Placar de visão
-    // KDA
-    // Duração de partida???
     const riotAccount = sessionStorage.RIOT_ACCOUNT;
     const riotId = sessionStorage.RIOT_TAG;
-    // const riotAccount = "KatenKyokotsu";
-    // const riotId = 'Shied';
-    const apiKey = 'RGAPI-7ea8fcd9-d16c-4a59-94d5-5e75307e0bb6';
+    const apiKey = 'RGAPI-98e9d8bb-b169-42ed-b371-67f91fd2195f';
 
     try {
       // Adquiri o nome e tag do usuario
@@ -209,6 +195,7 @@
           gameDuration: Number((match.info.gameDuration / 60).toFixed(2))
         };
       });
+
 
       id_CS.innerHTML = `${(minhasPartidas[0].cs).toFixed(2)}`;
       id_DPM.innerHTML = `${(minhasPartidas[0].damagePerMinute).toFixed(2)}`;
@@ -315,7 +302,7 @@
       const vitorias = minhasPartidas.filter(p => p.win).length;
       const winrate = ((vitorias / minhasPartidas.length) * 100).toFixed(1);
 
-      // === KDA Médio ===
+      // KDA Médio 
       const kdaMedio = medias.kda.toFixed(2);
 
       id_champ.innerHTML = maisJogado;
