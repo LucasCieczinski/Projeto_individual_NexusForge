@@ -112,7 +112,6 @@ body {
   background-color: rgba(13, 13, 14, 0.5);
 }
 
-
 .content-header {
   display: flex;
   align-items: center;
@@ -121,17 +120,17 @@ body {
 }
 
 .content-header h1 {
-    font-size: 2.5rem;
-    color: var(--cor-destaque);
-    font-weight: 600;
+  font-size: 2.5rem;
+  color: var(--cor-destaque);
+  font-weight: 600;
 }
 
 .bloco-conta {
-    background-color: rgba(10, 10, 10, 0.85);
-    min-height: 79vh;
-    border-radius: 16px;
-    padding: 2.5rem 3rem;
-    box-shadow: 0 0 30px rgba(0,0,0,0.6);
+  background-color: rgba(10, 10, 10, 0.85);
+  min-height: 79vh;
+  border-radius: 16px;
+  padding: 2.5rem 3rem;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.6);
 }
 
 .bloco-conta h2 {
@@ -142,12 +141,13 @@ body {
 /* Inputs */
 .bloco-conta div {
   display: flex;
+  justify-content: center;
   flex-direction: column;
   gap: 8px;
 }
 
 .bloco-conta input {
-  width: 50%;             /* Se adapta ao bloco */
+  width: 50%;
   padding: 12px;
   background: #0b0b0c;
   border: 1px solid #2e2e2e;
@@ -157,7 +157,35 @@ body {
 
 .bloco-conta input:focus {
   border-color: var(--destaque-dourado);
-  box-shadow: 0 0 8px rgba(191,161,87,0.4);
+  box-shadow: 0 0 8px rgba(191, 161, 87, 0.4);
   outline: none;
 }
 
+.configs p {
+  font-size: 0.8rem;
+}
+
+.button-att {
+  display: flex;
+  width: 50%;
+  align-items: center;
+}
+
+.button-att button {
+  width: 100%;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-family: "Rajdhani", sans-serif;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border: 1px solid var(--destaque-dourado, #c8aa6e);
+  color: var(--destaque-dourado, #c8aa6e);
+  background: transparent;
+}
+
+.button-att button:hover {
+  background-color: var(--destaque-dourado, #c8aa6e);
+  color: #000;
+  cursor: pointer;
+}

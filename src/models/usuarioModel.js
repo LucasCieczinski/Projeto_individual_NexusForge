@@ -1,3 +1,4 @@
+const { tentativas } = require("../controllers/usuarioController");
 var database = require("../database/config")
 
 function autenticar(email, senha) {
@@ -22,7 +23,20 @@ function cadastrar(username, email, senha, riotAccount, riotTag) {
     return database.executar(instrucaoSql);
 }
 
+
+function verificarTentativas(idUsuario) {
+    console.log("ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function cadastrar():", idUsuario);
+
+    var instrucaoSql = `
+        SELECT MAX(idTentativa) as tentativas FROM tentativa WHERE fkUsuario ='${idUsuario}'
+    `
+    console.log("Executando a instrução SQL: \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
+
+
 module.exports = {
     autenticar,
-    cadastrar
+    cadastrar,
+    verificarTentativas
 };

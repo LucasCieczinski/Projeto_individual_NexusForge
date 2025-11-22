@@ -118,15 +118,10 @@
                     mensagem_erro.innerHTML =
                         "Login realizado com sucesso! Redirecionando para Dashboard...";
                     mensagem_erro.style.opacity = "1";
-                    var loading = document.getElementById('loading');
-                    loading.style.display = 'flex';
+                    window.location = "/riftinsight.html";
 
-                    setTimeout(function () {
-                        window.location = "/riftinsight.html";
-                        loading.style.display = 'none';
-                        mensagem_erro.style.opacity = "0";
-                    }, 1000); // apenas para exibir o loading
-
+                }).catch(function (erro) {
+                    console.log(erro);
                 });
 
             } else {
@@ -137,10 +132,8 @@
                     console.error(texto);
                     mensagem_erro.innerHTML = "Email ou/e senha estão incorretos!";
                 });
-            }
 
-        }).catch(function (erro) {
-            console.log(erro);
+            }
         })
 
         return false;

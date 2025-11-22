@@ -1,4 +1,6 @@
-document.addEventListener("mediasProntas", () => {
+// Executa a função mediasProntas e monta o grafico
+function mediasProntas() { 
+  // Armazena as medias do jogador
   const m = window.medias;
 
   const limites = {
@@ -9,10 +11,12 @@ document.addEventListener("mediasProntas", () => {
     cs: 10,
   };
 
+  // Transforma o valor da média em um valor de 0 a 100 (%) / mudar
   function normalizar(valor, maximo) {
     return Math.min((valor / maximo) * 100, 100);
   }
 
+  // Array com os dados tratados do usuario, os dados são tratados pela função normalizar com parametros de media e maxima
   const playerData = [
     normalizar(m.kda, limites.kda),
     normalizar(m.dpm, limites.dpm),
@@ -21,7 +25,17 @@ document.addEventListener("mediasProntas", () => {
     normalizar(m.cs, limites.cs),
   ];
 
-  const maiorValor = Math.max(...playerData);
+  // Pega o maior valor do array playerData (... espalha os valores dentro da função) trocar por FOR
+  var maiorValor = 0;
+  
+  for (let i = 0; i < playerData.length; i++) {
+    
+    if(playerData[i] > maiorValor){
+      maiorValor = playerData[i]
+    }
+    
+  }
+  // ajusta o tamanho do grafico baseado no maior valor inserido
   const limiteAjustado = Math.max(maiorValor * 1.25, 40);
 
   const data = {
@@ -29,7 +43,6 @@ document.addEventListener("mediasProntas", () => {
     datasets: [
       {
         label: "Jogador",
-
         data: playerData,
         fill: true,
         backgroundColor: "rgba(191, 161, 87, 0.22)",
@@ -54,7 +67,6 @@ document.addEventListener("mediasProntas", () => {
       animations: {
         tension: { duration: 1700, easing: "easeInOutQuart" },
       },
-
       scales: {
         r: {
           min: 0,
@@ -83,4 +95,5 @@ document.addEventListener("mediasProntas", () => {
 
   const ctx = document.getElementById("player-status");
   const chart = new Chart(ctx, config);
-});
+};
+// );

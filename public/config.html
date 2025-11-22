@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
 </head>
 
-<body>
+<body onload="carregarPagina()">
     <header>
         <nav class="sidebar">
             <div class="logo">
@@ -34,15 +34,51 @@
         <section class="bloco-conta">
             <h2>Conta</h2>
 
-            <div>
+            <div class="configs">
                 <label for="ipt_email">E-mail</label>
-                <input id="ipt_email" type="text" placeholder="Email">
+                <input id="ipt_email" type="text" placeholder="Email">  <p>Atual: <strong id="emailAtual"></strong></p>
+            <!-- </div> -->
+                <br>
+                <label for="ipt_riotAccount">RiotAccount</label>
+                <input type="text" id="ipt_riotAccount" placeholder="Riot account"> <p>Atual: <strong id="contaAtual"></strong></p>
+            <!-- </div> -->
+                <br>
+                <label for="ipt_riotTag">Riot Tag</label>
+                <input type="text" id="ipt_riotTag" placeholder="Riot tag">     <p>Atual: <strong id="tagAtual">#</strong></p>
             </div>
-
+            
+            <div class="button-att">
+                <br>
+                <button onclick="atualizar()">Atualizar</button>
+            </div>
+            
+            <div id="div_mensagemErro"></div>
         </section>
     </main>
 
 
 </body>
-
 </html>
+<script>
+    function carregarPagina(){
+        var email = sessionStorage.EMAIL_USUARIO;
+        var riotAccount = sessionStorage.RIOT_ACCOUNT;
+        var riotTag = sessionStorage.RIOT_TAG;
+
+        emailAtual.innerHTML = email;
+        contaAtual.innerHTML = riotAccount;
+        tagAtual.innerHTML += riotTag;
+    }
+
+
+    function atualizar(){
+        var novoEmail = ipt_email.value;
+        var novaConta = ipt_riotAccount.value;
+        var riotTag = ipt_riotTag.value;
+
+        if(novoEmail == "" && novaConta == "" && riotTag == ""){
+            div_mensagemErro.innerHTML = `Ao menos 1 campo precisa estar preenchido!`
+        }else if ()
+
+    }
+</script>

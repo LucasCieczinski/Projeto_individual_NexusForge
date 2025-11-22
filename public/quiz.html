@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="Styles/style_quiz.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+    <script src="quiz.js"></script>
+    <script src="sessao.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body onload="carregarPagina()">
+
+    <header>
+        <nav class="sidebar">
+            <div class="logo">
+                <div class="logo-texto">NexusForge</div>
+            </div>
+
+            <ul>
+                <li><a href="riftInsight.html"><i class="fa-solid fa-chart-line"></i><span>Desempenho</span></a></li>
+                <li><a href="quiz.html"><i class="fa-solid fa-clipboard-list"></i><span>Quiz</span></a></li>
+                <li><a href="#" onclick="limparSessao()"><i
+                            class="fa-solid fa-right-from-bracket"></i><span>Sair</span></a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="main-content-quiz" id="quizMain">
+        <Section class="quiz-page">
+            <div>
+                <div class="start" id="start">
+                    <div class="quiz-start">
+                        <h2>Descubra sua Lane</h2>
+                        <button onclick="iniciar()">Iniciar quiz</button>
+                    </div>
+                </div>
+
+                <div id="jogo" class="jogo-conteudo" style="display: none;">
+
+                    <div id="infoQuestao">
+                        <span>Questão atual: <span id="spanNumeroDaQuestaoAtual"></span> de <span
+                                id="qtdQuestoes"></span>
+                            questões.</span>
+                    </div>
+
+                    <div id="perguntaDaQuestaoAtual">
+                        <span id="spanQuestaoExibida"></span>
+                    </div>
+
+                    <div id="infoAlternativas">
+                        <span><em>Escolha uma opção dentre as abaixo:</em></span>
+                    </div>
+
+                    <div id="opcoes" class="flex-colunar padding-8">
+                        <span>
+                            <input type="radio" id="primeiraOpcao" name="option" class="radio" value="alternativaA" />
+                            <label for="primeiraOpcao" class="option" id="labelOpcaoUm"></label>
+                        </span>
+                        <span>
+                            <input type="radio" id="segundaOpcao" name="option" class="radio" value="alternativaB" />
+                            <label for="segundaOpcao" class="option" id="labelOpcaoDois"></label>
+                        </span>
+                        <span>
+                            <input type="radio" id="terceiraOpcao" name="option" class="radio" value="alternativaC" />
+                            <label for="terceiraOpcao" class="option" id="labelOpcaoTres"></label>
+                        </span>
+                        <span>
+                            <input type="radio" id="quartaOpcao" name="option" class="radio" value="alternativaD" />
+                            <label for="quartaOpcao" class="option" id="labelOpcaoQuatro"></label>
+                        </span>
+                        <span>
+                            <input type="radio" id="quintaOpcao" name="option" class="radio" value="alternativaE" />
+                            <label for="quintaOpcao" class="option" id="labelOpcaoCinco"></label>
+                        </span>
+                    </div>
+
+                    <div id="botoes">
+                        <button onclick="submeter()" id="btnSubmeter">Submeter resposta</but ton>
+                            <button onclick="avancar()" id="btnProx" disabled>Avançar para próxima questão</button>
+                            <!-- <button onclick="finalizar()" id="btnConcluir" disabled>Finalizar Quiz</button> -->
+                    </div>
+
+                </div>
+            </div>
+        </Section>
+    </main>
+
+    <main class="main-content-dash" style="display: none;" id="dashMain">
+        <section class="player-card">
+            <div class="boxEsquerda">
+                <div class="lane">
+                    <img id="imagemLane" class="lane-icon">
+
+                    <div class="lane-texto">
+                        <h2>Sua Lane ideal é:</h2>
+                        <h1 id="laneResultado"></h1>
+                        <p id="descLane">Você gosta de criar impacto estratégico e estar em todos os lugares ao mesmo
+                            tempo.</p>
+                    </div>
+                </div>
+                <div class="lane-desc">
+                    <div class="lane-dicas">
+                        <h3>Dicas para a <strong id="laneResultadotips"></strong></h3>
+                        <ul id="dicasLane">
+
+                        </ul>
+                    </div>
+                    <div class="kpis">
+                        <div class="kpi-user">
+                            <span>Quantidade de Tentativas</span>
+                            <p id="tentativas"></p>
+                        </div>
+                        <div class="kpi-user">
+                            <span>Principal resposta</span>
+                            <p id="respostaLane"></p>
+                        </div>
+                        <button class="button-refazer" onclick="tentarNovamente()">Tentar Novamente</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="boxDireita">
+                <div class="titulo-grafico">
+                    <h2>Ranking de Popularidade por Lane</h2>
+                </div>
+                <div class="grafico">
+                    <canvas id="ranking-chart"></canvas>
+                </div>
+            </div>
+        </section>
+    </main>
+    <script src="quizChart.JS"></script>
+</body>
+
+</html>
+<script>
+    var tentativas = 0;
+    var idUsuario = sessionStorage.ID_USUARIO;
+
+    const desc = {
+        top: "Você prefere jogar no próprio ritmo, sendo independente e resistente, dominando o duelo 1x1",
+        jg: "Você gosta de criar impacto estratégico e estar em todos os lugares ao mesmo tempo",
+        mid: "Você busca controle total da partida, influenciando rotas e decisões com alto impacto",
+        adc: "Você gosta de ser o protagonista e causar muito dano, sendo o centro das lutas em equipe no late game",
+        sup: "Você prefere proteger, orientar e potencializar sua equipe, criando oportunidades para todos brilharem"
+    }
+
+    const dicasPorLane = {
+        top: [
+            "Controle a rota para decidir quando avançar ou recuar sem precisar de ajuda.",
+            "Entenda seus matchups para dominar trocas e momentos de poder.",
+            "Use o TP de forma estratégica para impactar outras rotas.",
+            "Trabalhe bem o controle de wave para criar vantagens a longo prazo."
+        ],
+
+        jg: [
+            "Como jungle você deve entender um pouco todas as rotas do jogo.",
+            "A jungle é uma lane que gira em torno de decisões.",
+            "Aprenda a trabalhar com visão e tempo.",
+            "Controle de objetivos como o dragão e o arauto definem o ritmo da partida."
+        ],
+
+        mid: [
+            "Mid é uma rota central, então rotacionar bem é essencial.",
+            "Entenda quando empurrar a wave para criar pressão no mapa.",
+            "Controle visão nos dois lados do rio para evitar emboscadas.",
+            "Jogue em torno de power spikes do seu campeão para impactar o jogo."
+        ],
+
+        adc: [
+            "Posicionamento é sua maior arma, e seu maior risco.",
+            "Foque em manter um bom farm para escalar rápido.",
+            "Jogue sempre próximo ao seu suporte para sobreviver à lane phase.",
+            "Saiba quando entrar e sair de uma luta, evitando ser explodido."
+        ],
+
+        sup: [
+            "Controle a visão do mapa para garantir segurança e oportunidades.",
+            "Proteja seu ADC, mas não esqueça de impactar outras partes do mapa.",
+            "Entenda se seu campeão é de engage, peel ou poke e jogue conforme.",
+            "Aproveite janelas para criar vantagem na lane com pressão e roams."
+        ]
+    };
+
+    function carregarPagina() {
+        fetch("/usuarios/tentativas", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                idUsuarioServer: idUsuario
+            })
+        }).then(function (resposta) {
+            console.log("ESTOU NO THEN DO tentativas!")
+
+            if (resposta.ok) {
+
+                resposta.json().then(json => {
+                    console.log(json);
+                    console.log(JSON.stringify(json));
+                    sessionStorage.TENTATIVAS = json.tentativas;
+                    tentativas = sessionStorage.TENTATIVAS;
+                    carregarDashQuiz();
+                })
+            } else {
+                console.log("erro ao obter as tentativas")
+            }
+        }).catch(function (erro) {
+            console.log(erro);
+        });
+
+        console.log(tentativas)
+
+
+    }
+
+    function carregarDashQuiz() {
+        if (tentativas == "null" || tentativas == "undefined") {
+            // document.getElementById("quizMain").style.display = "flex";
+            document.getElementById("dashMain").style.display = "none";
+        } else {
+            document.getElementById("dashMain").style.display = "flex";
+            document.getElementById("quizMain").style.display = "none";
+            montarDash();
+        }
+    }
+
+
+    function montarDash() {
+        var resultados = [];
+        var response = 0;
+        fetch(`/rotaQuiz/adquirirResultados/${idUsuario}`, { cache: 'no-store' })
+            .then(function (resposta) {
+                if (resposta.ok) {
+                    resposta.json().then(function (resposta) {
+                        console.log(`Dados recebidos: ${JSON.stringify(resposta)}`);
+                        var qtdTentativas = resposta.length;
+                        response = resposta;
+                        console.log(response, qtdTentativas)
+
+                        // Percorre o vetor de response e verifica todos os resultados
+                        var top = 0;
+                        var jg = 0;
+                        var mid = 0;
+                        var adc = 0;
+                        var sup = 0;
+                        for (let i = 0; i < response.length; i++) {
+                            let posicaoAtual = response[i].resultado
+
+                            if (posicaoAtual == "top") {
+                                top++
+                            } else if (posicaoAtual == "jungle") {
+                                jg++
+                            } else if (posicaoAtual == "mid") {
+                                mid++
+                            } else if (posicaoAtual == "adc") {
+                                adc++
+                            } else {
+                                sup++
+                            }
+                        }
+
+                        resultados.push(top)
+                        resultados.push(jg)
+                        resultados.push(mid)
+                        resultados.push(adc)
+                        resultados.push(sup)
+
+                        var maiorValor = resultados[0];
+                        var posicaoMaiorValor = 0;
+
+                        for (let i = 1; i < resultados.length; i++) {
+                            if (resultados[i] > maiorValor) {
+                                maiorValor = resultados[i];
+                                posicaoMaiorValor = i;
+                            }
+                        }
+
+                        console.log("Maior valor:", maiorValor, "Posição:", posicaoMaiorValor);
+
+                        // Montagem do principal resultado (mais recorrente)
+                        var ultimoResultado = response[qtdTentativas - 1].resultado.toUpperCase()
+                        var lanePrincipal = ""
+                        if (posicaoMaiorValor == 0) {
+                            lanePrincipal = "TOP"
+                        } else if (posicaoMaiorValor == 1) {
+                            lanePrincipal = "JUNGLE"
+                        } else if (posicaoMaiorValor == 2) {
+                            lanePrincipal = "MID"
+                        } else if (posicaoMaiorValor == 3) {
+                            lanePrincipal = "ADCARRY"
+                        } else if (posicaoMaiorValor == 4) {
+                            lanePrincipal = "SUPORTE"
+                        }
+
+
+                        // Montagem do resultado do ultimo quiz
+                        if (ultimoResultado == "TOP") {
+                            document.getElementById('imagemLane').src = `img/top.png`
+                            document.getElementById('descLane').innerHTML = desc.top
+                            document.getElementById('dicasLane').innerHTML = `<li>${dicasPorLane.top[0]}</li>
+                            <li>${dicasPorLane.top[1]}</li>
+                            <li>${dicasPorLane.top[2]}</li>
+                            <li>${dicasPorLane.top[3]}</li>`
+                        } else if (ultimoResultado == "JUNGLE") {
+                            document.getElementById('imagemLane').src = `img/jungle.png`
+                            document.getElementById('descLane').innerHTML = desc.jg
+                            document.getElementById('dicasLane').innerHTML = `<li>${dicasPorLane.jg[0]}</li>
+                            <li>${dicasPorLane.jg[1]}</li>
+                            <li>${dicasPorLane.jg[2]}</li>
+                            <li>${dicasPorLane.jg[3]}</li>`
+                        } else if (ultimoResultado == "MID") {
+                            document.getElementById('imagemLane').src = `img/mid.png`
+                            document.getElementById('descLane').innerHTML = desc.mid
+                            document.getElementById('dicasLane').innerHTML = `<li>${dicasPorLane.mid[0]}</li>
+                            <li>${dicasPorLane.mid[1]}</li>
+                            <li>${dicasPorLane.mid[2]}</li>
+                            <li>${dicasPorLane.mid[3]}</li>`
+                        } else if (ultimoResultado == "ADC") {
+                            document.getElementById('imagemLane').src = `img/adc.png`
+                            document.getElementById('descLane').innerHTML = desc.adc
+                            document.getElementById('dicasLane').innerHTML = `<li>${dicasPorLane.adc[0]}</li>
+                            <li>${dicasPorLane.adc[1]}</li>
+                            <li>${dicasPorLane.adc[2]}</li>
+                            <li>${dicasPorLane.adc[3]}</li>`
+                        } else {
+                            document.getElementById('imagemLane').src = `img/suporte.png`
+                            document.getElementById('descLane').innerHTML = desc.sup
+                            document.getElementById('dicasLane').innerHTML = `<li>${dicasPorLane.sup[0]}</li>
+                            <li>${dicasPorLane.sup[1]}</li>
+                            <li>${dicasPorLane.sup[2]}</li>
+                            <li>${dicasPorLane.sup[3]}</li>`
+                        }
+
+
+                        document.getElementById('laneResultado').textContent = ultimoResultado
+                        document.getElementById('tentativas').textContent = qtdTentativas
+                        document.getElementById('respostaLane').textContent = lanePrincipal
+                        document.getElementById('laneResultadotips').textContent = ultimoResultado
+
+                        montarRanking();
+                    });
+                } else {
+                    console.error('Nenhum dado encontrado ou erro na API');
+                }
+            })
+            .catch(function (error) {
+                console.log(`Erro ao obter dados ${error.message}`)
+            })
+    }
+
+    function montarRanking() {
+
+        fetch(`/rotaQuiz/ranking/`, { cache: 'no-store' })
+            .then(function (resposta) {
+                if (resposta.ok) {
+                    resposta.json().then(function (resposta) {
+                        console.log(`Dados recebidos: ${JSON.stringify(resposta)}`);
+
+                        let totalGeral = 0;
+                        for (let i = 0; i < resposta.length; i++) {
+                            totalGeral += resposta[i].total;
+                        }
+
+
+                        let porcentagens = [];
+                        for (let i = 0; i < resposta.length; i++) {
+
+                            let percentual = (resposta[i].total / totalGeral) * 100;
+
+                            porcentagens.push({
+                                lane: resposta[i].resultado,
+                                porcentagem: percentual.toFixed(2)
+                            });
+                        }
+                        console.log(porcentagens)
+                        plotarGrafico(porcentagens);
+
+                    });
+                } else {
+                    console.error(`Nenhum dado encontrado ou erro na API`);
+                }
+            })
+            .catch(function (error) {
+                console.log(`Erro ao obter dados ${error.message}`)
+            })
+    }
+</script>

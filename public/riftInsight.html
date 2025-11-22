@@ -15,13 +15,12 @@
 <body onload="iniciarDashboard()">
   <nav class="sidebar">
     <div class="logo">
-  <div class="logo-texto">NexusForge</div>
-</div>
+      <div class="logo-texto">NexusForge</div>
+    </div>
 
     <ul>
       <li><a href="#"><i class="fa-solid fa-chart-line"></i><span>Desempenho</span></a></li>
-      <li><a href="#"><i class="fa-solid fa-clipboard-list"></i><span>Missões</span></a></li>
-      <li><a href="config.html"><i class="fa-solid fa-gear"></i><span>Configurações</span></a></li>
+      <li><a href="quiz.html"><i class="fa-solid fa-clipboard-list"></i><span>Quiz</span></a></li>
       <li><a href="#" onclick="limparSessao()"><i class="fa-solid fa-right-from-bracket"></i><span>Sair</span></a></li>
     </ul>
   </nav>
@@ -98,6 +97,7 @@
 </html>
 <script>
   async function iniciarDashboard() {
+    // Enquanto a função obterDados estiver "carregando" o style de carregamento aparece na tela e some quando a função se encerra
     try {
       document.getElementById("loading").style.display = "flex";
       await obterDados();
@@ -108,9 +108,10 @@
   }
 
   async function obterDados() {
+    console.time('TempoLoading')
     const riotAccount = sessionStorage.RIOT_ACCOUNT;
     const riotId = sessionStorage.RIOT_TAG;
-    const apiKey = 'RGAPI-98e9d8bb-b169-42ed-b371-67f91fd2195f';
+    const apiKey = 'RGAPI-ed738e54-4643-4311-bc44-64a98f21f744';
 
     try {
       // Adquiri o nome e tag do usuario
@@ -144,20 +145,18 @@
 
 
 
-      // Adquiri o id das ultimas 20 partidas solo/duo
+      // Adquiri o id das ultimas 10 partidas solo/duo
       const partidaResponse = await fetch(
-        `https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/${conta.puuid}/ids?type=ranked&queue=420&count=20&api_key=${apiKey}`
+        `https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/${conta.puuid}/ids?type=ranked&queue=420&count=10&api_key=${apiKey}`
       );
       if (!partidaResponse.ok)
         throw new Error("Nenhuma partida encontrada");
       const partida = await partidaResponse.json();
 
 
-      //  Adquiri os dados das 20 partidas (1 requisição por vez em um delay de 270ms +ou-)
+      //  Adquiri os dados das 10 partidas (espera receber a resposta de uma requisição para começar outra)
 
-      async function delay(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
-      }
+
 
       const partidasDetalhes = [];
 
@@ -171,17 +170,32 @@
 
         partidasDetalhes.push(dadosMatch);
 
-        await delay(70);
       }
 
 
       //  Filtra o jogador e adquiri os dados dele
 
-      const minhasPartidas = partidasDetalhes.map(match => {
-        const p = match.info.participants.find(x => x.puuid === conta.puuid);
+      const minhasPartidas = [];
 
-        return {
+      for (let partidaAtual = 0; partidaAtual < partidasDetalhes.length; partidaAtual++) {
+        const match = partidasDetalhes[partidaAtual];
+
+        // Variavel dos dados do jogador
+        let p = null;
+
+        // Procurar o id do jogador correto
+        for (let j = 0; j < match.info.participants.length; j++) {
+          if (match.info.participants[j].puuid === conta.puuid) {
+            p = match.info.participants[j];
+            break; // quando achar o id para o loop
+          }
+        }
+
+        // Dados do array final
+        minhasPartidas.push({
           champion: p.championName,
+          individualPosition: p.individualPosition,
+          lane: p.lane,
           win: p.win,
           kills: p.kills,
           deaths: p.deaths,
@@ -193,10 +207,11 @@
           visionScore: p.visionScore,
           objectives: p.challenges.objectiveControlPercentage,
           gameDuration: Number((match.info.gameDuration / 60).toFixed(2))
-        };
-      });
+        });
+      }
+      console.log(minhasPartidas)
 
-
+      console.log(minhasPartidas[0].individualPosition)
       id_CS.innerHTML = `${(minhasPartidas[0].cs).toFixed(2)}`;
       id_DPM.innerHTML = `${(minhasPartidas[0].damagePerMinute).toFixed(2)}`;
       id_GPM.innerHTML = `${(minhasPartidas[0].goldPerMinute).toFixed(2)}`;
@@ -235,36 +250,59 @@
         objectives: dadosSoma.objectives / qtd
       };
 
+
+      // chama a função mediasProntas para montar o chartJS com a variavel window.medias
       window.medias = medias;
-      document.dispatchEvent(new CustomEvent("mediasProntas"));
-      console.log(dadosSoma, medias)
+      mediasProntas()
 
 
       // Inserção do nome do usuario na pagina
       id_user.innerHTML = sessionStorage.NOME_USUARIO;
       id_name.innerHTML = sessionStorage.RIOT_ACCOUNT;
 
+      // Calculo de Taxa de Vitória 
+      var vitorias = 0;
+      var derrotas = 0;
+      
+      // Verifica o resultado de cada partida
+      for (let cont = 0; cont < minhasPartidas.length; cont++) {
+        const resultadoJogo = minhasPartidas[cont].win;
+        
+        if(resultadoJogo == true){
+          vitorias++;
+        }else {
+          derrotas++;
+        }
+        
+      }
+
+      const winrate = ((vitorias / minhasPartidas.length) * 100).toFixed(1);
 
 
 
       // Inserção da nota do Usuario
 
+      // Peso de cada status na nota
       const pesos = {
-        kda: 0.10,
-        cs: 0.20,
-        dpm: 0.20,
-        gpm: 0.30,
-        vision: 0.20,
+        kda: 0.18,
+        cs: 0.25,
+        dpm: 0.18,
+        gpm: 0.08,
+        vision: 0.16,
+        winrate: 0.15
       };
 
+      // Valor ideal/maximo de cada status
       const ideal = {
-        kda: 3,
-        cs: 10,
-        dpm: 600,
-        gpm: 400,
-        vision: 30
+        kda: 4.0,
+        cs: 8,
+        dpm: 500,
+        gpm: 380,
+        vision: 25,
+        winrate: 60
       };
 
+      // Função de calculo (real / ideal) Math.min mantem o menor numero 
       function score(real, ideal) {
         return Math.min(real / ideal, 1);
       }
@@ -274,7 +312,8 @@
         score(medias.cs, ideal.cs) * pesos.cs +
         score(medias.dpm, ideal.dpm) * pesos.dpm +
         score(medias.gpm, ideal.gpm) * pesos.gpm +
-        score(medias.vision, ideal.vision) * pesos.vision;
+        score(medias.vision, ideal.vision) * pesos.vision +
+        score(winrate, ideal.winrate) * pesos.winrate;
 
       const notaFinal = Math.round(nota * 100);
       console.log(notaFinal);
@@ -298,10 +337,7 @@
         }
       }
 
-      // Calculo de Taxa de Vitória
-      const vitorias = minhasPartidas.filter(p => p.win).length;
-      const winrate = ((vitorias / minhasPartidas.length) * 100).toFixed(1);
-
+      
       // KDA Médio 
       const kdaMedio = medias.kda.toFixed(2);
 
@@ -314,6 +350,7 @@
       resultado.textContent = "Erro: " + err.message;
       resultado.style.color = "red";
     }
-
+    console.timeEnd('TempoLoading')
   }
+  
 </script>
