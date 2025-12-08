@@ -297,7 +297,6 @@ body {
   border: 3px solid rgba(191, 161, 87, 0.4);
   border-radius: 50%;
   box-shadow: 0 0 18px rgba(191, 161, 87, 0.5);
-  animation: ringPulse 2.5s ease-in-out infinite;
 }
 
 .loading-icon {
